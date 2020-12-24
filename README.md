@@ -8,7 +8,9 @@ Supports
        - png
        - ico
        - htm
-       - html 
+       - html
+       
+
 ## Compile Using below command and run
 ## gcc -pthread http-server.c -o http-server
 
