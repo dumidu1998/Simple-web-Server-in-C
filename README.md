@@ -17,3 +17,5 @@ Supports
 	gcc -pthread http-server.c -o http-server
 
 **pthread Library is used when compiling.**
+
+Then Open the browser and Type localhost:8080 and Continue
