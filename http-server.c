@@ -76,6 +76,7 @@ void *processRequest(void *newSock)
 {
 
    printf("processRequest:\n");
+   
    int s = *((int *)newSock);
    char buffer[BUFFER_SIZE];
    char *method;
@@ -88,48 +89,25 @@ void *processRequest(void *newSock)
       close(s);
       return NULL;
    }
-   // If response is nul, don't try to parse it.  *******
-   if (buffer[0] == '\0')
-   {
-      close(s);
-      return NULL;
-   }
-
-   // Print request to console
+ 
+   // Print the request to the console
    printf("%s\n", buffer);
 
    method = strtok(buffer, " ");
    path = strtok(NULL, " ");
 
-   // If request type is not GET, send back 403 since it's currently unsupported. ******
-   if (strcasecmp(method, "GET") != 0)
-   {
-      write(s, HTTP_403, strlen(HTTP_403));
-      close(s);
-      return (NULL);
-   }
-
    // Get file extension
    const char *ext;
    ext = get_file_ext(path);
-   //strcat(path,"files");
    printf("Requested resource path: %s\n", path);
    printf("File extension: %s\n", ext);
-
-   // Disallow relative paths to parent directories ***
-   if (path[1] == '.')
-   {
-      write(s, HTTP_403, strlen(HTTP_403));
-      close(s);
-      return (NULL);
-   }
 
    // Format the response date *****
    char date[DATESTAMP_LENGTH + 6] = "Date: ";
    getDate(date);
    //printf("%s",date);
 
-   // If path is '/', serve the default index page and return
+   // If path is '/', serve the default index page
    if (strcmp(path, "/") == 0)
    {
       write(s, HTTP_OK_HEAD, strlen(HTTP_OK_HEAD));
@@ -144,19 +122,17 @@ void *processRequest(void *newSock)
       write(s, CONN_CLOSE, strlen(CONN_CLOSE));
       write(s, date, strlen(date));
       write(s, CONT_TYPE_HTML, strlen(CONT_TYPE_HTML));
-
       int current_char = 0;
       do
       {
          current_char = fgetc(fp);
          write(s, &current_char, sizeof(char));
       } while (current_char != EOF);
-      //write(s, INDEX_PAGE_BODY, strlen(INDEX_PAGE_BODY));
       close(s);
       return NULL;
    }
 
-   // Determine content type from file extenion
+   // Get content type from file extension
    int i;
    char *ctype = NULL;
    for (i = 0; extensions[i].ext != 0; i++)
@@ -168,7 +144,7 @@ void *processRequest(void *newSock)
       }
    }
 
-   // Either filename given doesn't have an extension, or the content type isn't supported.
+   // If filename given doesn't have an extension or the content type isn't supported. show error 403
    if (ctype == NULL)
    {
       write(s, HTTP_403, strlen(HTTP_403));
@@ -193,22 +169,15 @@ void *processRequest(void *newSock)
       printf("file opened successfully\n");
    }
 
-   // If we reached here, the requested resource was found and opened.
+   // The requested resource was found and opened. Get the content length of the file
    int contentLength;
    contentLength = get_content_length(fp);
-   if (contentLength < 0)
-   { //*************
-      printf("Length is requested file < 0. Returning 403.\n");
-      write(s, HTTP_403, strlen(HTTP_403));
-      close(s);
-      return (NULL);
-   }
-
-   // Write back headers and content
+   
+   // Send headers and content
    write(s, HTTP_OK_HEAD, strlen(HTTP_OK_HEAD));
    write(s, SERVER, strlen(SERVER));
 
-   // Format content length
+   // Send content length
    char contentLengthString[40];
    sprintf(contentLengthString, "%s %d\n", CONTENT_LEN_BASE, contentLength);
    write(s, contentLengthString, strlen(contentLengthString));
@@ -216,7 +185,7 @@ void *processRequest(void *newSock)
    write(s, CONN_CLOSE, strlen(CONN_CLOSE));
    write(s, date, strlen(date));
 
-   // Format the content type
+   // Send the content type
    char contentType[80];
    sprintf(contentType, "%s %s\n\n", CONT_TYPE_BASE, ctype);
    write(s, contentType, strlen(contentType));
