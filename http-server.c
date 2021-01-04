@@ -241,7 +241,6 @@ int main(int argc, char *argv[])
    struct sockaddr_in address;
    unsigned short port = 8080;
 
-   printf("Server is active on http://localhost:%hu\n", port);
 
    // Create a new socket
    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) > 0)
@@ -251,13 +250,14 @@ int main(int argc, char *argv[])
 
    // Configure address attributes
    address.sin_family = AF_INET; //ipv4
-   address.sin_addr.s_addr = INADDR_ANY;  
+   address.sin_addr.s_addr = INADDR_ANY;  //ip address to any address
    address.sin_port = htons(port);
 
-   // Bind our socket to an address
+   // Bind the socket to an address
    if (bind(sock, (struct sockaddr *)&address, sizeof(address)) == 0)
    {
       printf("Successful binding\n");
+      printf("Server listening on http://localhost:%hu\n", port);
    }
    else
    {
