@@ -2,7 +2,10 @@
 # Simple-web-Server-in-C
 Simple web server written in C.
 
-It is a multi threaded web server.
+It is a multiprocess & multi-threaded web server.
+
+Works in a Linux environment.
+
 
 >**Supports**
 >- **gif**
