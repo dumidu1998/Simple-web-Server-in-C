@@ -8,20 +8,23 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <time.h>
-#include <pthread.h>
+#include <pthread.h>  //Necessary libraries included. 
 
 // Predefined static response headers
 const char *const HTTP_OK_HEAD = "HTTP/1.1 200 OK\n";
 const char *const HTTP_403 = "HTTP/1.1 403 Forbidden\nContent-Length: 166\nConnection: close\nContent-Type: text/html\n\n<html><head>\n<title>403 Forbidden</title>\n</head><body>\n<h1>Forbidden</h1>\nThe requested URL, file type or operation is not allowed on this webserver.\n</body></html>\n";
 const char *const HTTP_404 = "HTTP/1.1 404 Not Found\nContent-Length: 146\nConnection: close\nContent-Type: text/html\n\n<html><head>\n<title>404 Not Found</title>\n</head><body>\n<h1>404 Not Found</h1>\nThe requested resource was not found on the server.\n</body></html>\n";
+
 const char *const CONT_TYPE_BASE = "Content-Type: ";
 const char *const CONT_TYPE_HTML = "Content-Type: text/html\n\n";
 const char *const CONTENT_LEN_BASE = "Content-Length: ";
 const char *const SERVER = "Dumidu's Server\n";
 const char *const CONN_CLOSE = "Connection: close\n";
+
 const char *const HTTP_DATE_RESP_FORMAT = "%a, %d %b %Y %H:%M:%S %Z";
 
-// Size constants
+
+// Define Size constants
 #define DATESTAMP_LENGTH 30
 #define BUFFER_SIZE 1024
 
@@ -44,7 +47,7 @@ struct
 
 const char *get_file_ext(const char *filename)
 {
-   const char *dot = strrchr(filename, '.');
+   const char *dot = strrchr(filename, '.'); //finds last occurance of .
    if (!dot || dot == filename)
       return "";
    return dot + 1;
@@ -247,8 +250,8 @@ int main(int argc, char *argv[])
    }
 
    // Configure address attributes
-   address.sin_family = AF_INET;
-   address.sin_addr.s_addr = INADDR_ANY;
+   address.sin_family = AF_INET; //ipv4
+   address.sin_addr.s_addr = INADDR_ANY;  
    address.sin_port = htons(port);
 
    // Bind our socket to an address
