@@ -18,4 +18,4 @@ Supports
 
 **pthread Library is used when compiling.**
 
-Then Open the browser and Type localhost:8080 and ENJOY!!!!!!
+Then open the browser and Type localhost:8080 and ENJOY!!!!!!
