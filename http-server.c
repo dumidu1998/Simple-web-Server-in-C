@@ -20,7 +20,7 @@ const char* const CONTENT_LEN_BASE = "Content-Length: ";
 const char* const SERVER = "Dumidu\n";
 const char* const CONN_CLOSE = "Connection: close\n";
 const char* const HTTP_DATE_RESP_FORMAT = "%a, %d %b %Y %H:%M:%S %Z";
-const char* const INDEX_PAGE_BODY = "<html><body><h1>It works!</h1><h3>This is the default web page for the \"Reipache\" server.</h3><hr>Luke Reichold, 2014 - luke@reikam.com</body></html>";
+const char* const INDEX_PAGE_BODY = "<html><body><h1>It works!</h1><h3>This is the default web page for the \"Reipache\" server.</h3><hr>Dumidu Kasun</body></html>";
 
 // Size constants
 #define DATESTAMP_LENGTH    30
