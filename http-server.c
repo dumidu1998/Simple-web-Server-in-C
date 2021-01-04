@@ -105,7 +105,6 @@ void *processRequest(void *newSock)
    // Format the response date *****
    char date[DATESTAMP_LENGTH + 6] = "Date: ";
    getDate(date);
-   //printf("%s",date);
 
    // If path is '/', serve the default index page
    if (strcmp(path, "/") == 0)
@@ -254,7 +253,7 @@ int main(int argc, char *argv[])
          printf("Client connection is active...\n");
       }
 
-      // Each request handled on its own thread
+      // Create a thread for each request
 
       if (pthread_create(&thread, NULL, processRequest, &new_socket))
       {
